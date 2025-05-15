@@ -250,6 +250,7 @@ var azureDeploymentsEndpoints = []string{
 	"/audio/translations",
 	"/audio/speech",
 	"/images/generations",
+	"/images/edits",
 }
 
 // fullURL returns full URL for request.
