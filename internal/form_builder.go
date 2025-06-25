@@ -13,6 +13,7 @@ import (
 
 type FormBuilder interface {
 	CreateFormFile(fieldname string, file *os.File) error
+	CreateFormFileContentType(fieldname string, file *os.File) error
 	CreateFormFileReader(fieldname string, r io.Reader, filename string) error
 	WriteField(fieldname, value string) error
 	Close() error
