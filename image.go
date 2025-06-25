@@ -151,14 +151,14 @@ func (c *Client) CreateEditImage(ctx context.Context, request ImageEditRequest) 
 	builder := c.createFormBuilder(body)
 
 	// image
-	err = builder.CreateFormFile("image", request.Image)
+	err = builder.CreateFormFileContentType("image", request.Image)
 	if err != nil {
 		return
 	}
 
 	// mask, it is optional
 	if request.Mask != nil {
-		err = builder.CreateFormFile("mask", request.Mask)
+		err = builder.CreateFormFileContentType("mask", request.Mask)
 		if err != nil {
 			return
 		}
@@ -179,9 +179,11 @@ func (c *Client) CreateEditImage(ctx context.Context, request ImageEditRequest) 
 		return
 	}
 
-	err = builder.WriteField("response_format", request.ResponseFormat)
-	if err != nil {
-		return
+	if request.Model != "gpt-image-1" {
+		err = builder.WriteField("response_format", request.ResponseFormat)
+		if err != nil {
+			return
+		}
 	}
 
 	err = builder.Close()
