@@ -160,7 +160,9 @@ func (f file) ContentType() string {
 // Use WrapReader to wrap an io.Reader with filename and Content-type.
 type ImageEditRequest struct {
 	Image          io.Reader `json:"image,omitempty"`
+	ImageFilename  string    `json:"image_filename,omitempty"` // 新增字段，用于指定文件名
 	Mask           io.Reader `json:"mask,omitempty"`
+	MaskFilename   string    `json:"mask_filename,omitempty"` // 新增字段，用于指定掩码文件名
 	Prompt         string    `json:"prompt,omitempty"`
 	Model          string    `json:"model,omitempty"`
 	N              int       `json:"n,omitempty"`
@@ -176,7 +178,7 @@ func (c *Client) CreateEditImage(ctx context.Context, request ImageEditRequest) 
 	builder := c.createFormBuilder(body)
 
 	// image, filename verification can be postponed
-	err = builder.CreateFormFileReader("image", request.Image, "")
+	err = builder.CreateFormFileReader("image", request.Image, request.ImageFilename)
 	if err != nil {
 		return
 	}
@@ -184,7 +186,7 @@ func (c *Client) CreateEditImage(ctx context.Context, request ImageEditRequest) 
 	// mask, it is optional
 	if request.Mask != nil {
 		// filename verification can be postponed
-		err = builder.CreateFormFileReader("mask", request.Mask, "")
+		err = builder.CreateFormFileReader("mask", request.Mask, request.MaskFilename)
 		if err != nil {
 			return
 		}
@@ -236,6 +238,7 @@ func (c *Client) CreateEditImage(ctx context.Context, request ImageEditRequest) 
 // Use WrapReader to wrap an io.Reader with filename and Content-type.
 type ImageVariRequest struct {
 	Image          io.Reader `json:"image,omitempty"`
+	ImageFilename  string    `json:"image_filename,omitempty"`
 	Model          string    `json:"model,omitempty"`
 	N              int       `json:"n,omitempty"`
 	Size           string    `json:"size,omitempty"`
@@ -250,7 +253,7 @@ func (c *Client) CreateVariImage(ctx context.Context, request ImageVariRequest) 
 	builder := c.createFormBuilder(body)
 
 	// image, filename verification can be postponed
-	err = builder.CreateFormFileReader("image", request.Image, "")
+	err = builder.CreateFormFileReader("image", request.Image, request.ImageFilename)
 	if err != nil {
 		return
 	}
